@@ -42,20 +42,18 @@ namespace Pessoas_API
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            /*
-             "ConnectionStrings": {
-    "MySqlConnection":
-             */
             
-            if (Configuration != null && !string.IsNullOrEmpty(Configuration["CONNECT_POSTGRES"]))
-            {
-                _connectionPostgreSQL = Configuration["CONNECT_POSTGRES"];
-            }
-            else
-            {
-                _connectionPostgreSQL = Configuration["ConnectionStrings:PostgresConnection"];
-            }
-            _connectionPostgreSQL = Configuration["ConnectionStrings:PostgresConnection"];
+            string connPostgres = string.Format(
+                "User ID={0};Password={1};Host={2};Port={3};Database={4};",
+                Configuration["PS_USER_ID"],
+                Configuration["PS_PASSWORD"],
+                Configuration["PS_HOST"],
+                Configuration["PS_PORT"],
+                Configuration["PS_DATABASE"]
+                );
+
+
+            _connectionPostgreSQL = connPostgres;
 
             services.AddDbContext<PessoaContext>(
                 context => context.UseNpgsql(_connectionPostgreSQL)
