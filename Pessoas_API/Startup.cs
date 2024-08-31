@@ -55,6 +55,7 @@ namespace Pessoas_API
             {
                 _connectionPostgreSQL = Configuration["ConnectionStrings:PostgresConnection"];
             }
+            _connectionPostgreSQL = Configuration["ConnectionStrings:PostgresConnection"];
 
             services.AddDbContext<PessoaContext>(
                 context => context.UseNpgsql(_connectionPostgreSQL)

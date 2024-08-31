@@ -12,7 +12,7 @@ namespace Pessoas_API.a_Repository
 
         void SalvaOuAtualiza<T>(T entity, bool fazRegistroNovo) where T : EntidadePadrao;
 
-        Task<List<Pessoa>> GetAllPessoasAsync(bool incluiContatos = false);
+        Task<List<Pessoa>> GetAllPessoasAsync(bool incluiContatos = true);
 
         Task<Pessoa> GetPessoaByIdAsync(int id);
     }
