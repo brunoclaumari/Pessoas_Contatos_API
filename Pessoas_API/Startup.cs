@@ -59,18 +59,6 @@ namespace Pessoas_API
                 context => context.UseNpgsql(_connectionPostgreSQL)
             );
 
-
-            //services.AddDbContext<PessoaContext>(
-            //    context => context.UseMySql(
-            //        connectionString, ServerVersion.AutoDetect(connectionString)
-            //    )
-            //);
-
-            //services.AddDbContext<PessoaContext>(
-            //    context => context.UseMySql(Configuration.GetConnectionString("MySqlConnection"))
-            //);
-
-
             services.AddControllers(f =>
             {
                 //f.Filters.Add<MyExceptionFilter>();
@@ -85,7 +73,17 @@ namespace Pessoas_API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API Pessoas e contatos", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "API Pessoas e contatos", 
+                    Version = "v1",
+                    Description = "Web API de cadastro de pessoas e seus contatos",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Bruno de Sousa Silva",
+                        Email = "desousadev1@gmail.com",
+                        Url = new Uri("https://github.com/brunoclaumari")
+                    }
+                });
 
                 var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);

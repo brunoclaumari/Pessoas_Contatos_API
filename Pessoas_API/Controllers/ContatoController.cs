@@ -18,9 +18,15 @@ namespace Pessoas_API.Controllers
             _repo = repo;
         }
 
+        /// <summary>
+        /// Busca todos os contatos (paginada)
+        /// </summary>
+        /// <param name="pagina"></param>
+        /// <param name="totalPorPagina"></param>
+        /// <returns></returns>
         // GET: api/<ContatoController>
         [HttpGet]        
-        public async Task<IActionResult> GetAllPagedAsync([FromQuery] int pagina, [FromQuery] int totalPorPagina)
+        public async Task<IActionResult> GetAllContatosPagedAsync([FromQuery] int pagina, [FromQuery] int totalPorPagina)
         {
             try
             {
@@ -33,9 +39,14 @@ namespace Pessoas_API.Controllers
             }
         }
 
+        /// <summary>
+        /// Busca todos os contatos de uma pessoa pelo id dela
+        /// </summary>
+        /// <param name="pessoaId"></param>
+        /// <returns></returns>
         // GET api/<ContatoController>/5
         [HttpGet("pessoa/{pessoaId}")]
-        public async Task<IActionResult> GetByPessoaId(int pessoaId)
+        public async Task<IActionResult> GetAllContatosByPessoaId(int pessoaId)
         {
             try
             {
@@ -54,6 +65,12 @@ namespace Pessoas_API.Controllers
             
         }
 
+        /// <summary>
+        /// Atualiza um contato
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entradaContato"></param>
+        /// <returns></returns>
         // PUT api/<ContatoController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Contato entradaContato)
@@ -122,6 +139,11 @@ namespace Pessoas_API.Controllers
             }
         }
 
+        /// <summary>
+        /// Apaga um contato pelo seu id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE api/<ContatoController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

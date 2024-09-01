@@ -219,7 +219,7 @@ namespace Pessoas_API.a_Repository
         }
 
         public async Task<List<Contato>> GetAllContatosPagedAsync(int pagina = 1, int totalPorPagina = 10)
-        {
+        { 
             
             IQueryable<Contato> query = _context.Contatos;
 

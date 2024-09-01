@@ -20,10 +20,12 @@ namespace Pessoas_API.Controllers
         public PessoaController(IRepository repo)
         {
             _repo = repo;
-        }
+        }        
 
-
-
+        /// <summary>
+        /// Busca todas as pessoas cadastradas (com contatos)
+        /// </summary>
+        /// <returns></returns>
         // GET: api/<PessoaController>
         [HttpGet]
         //public Task<List<Pessoa>> GetAllPessoa()
@@ -38,9 +40,33 @@ namespace Pessoas_API.Controllers
             {
                 return BadRequest(new { Message = "Ocorreu um erro ao obter os dados" });
             }
-
         }
 
+        /// <summary>
+        /// Busca todas as pessoas cadastradas (sem contatos)
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/<PessoaController>/semcontatos
+        [HttpGet("semcontatos")]
+        //public Task<List<Pessoa>> GetAllPessoa()
+        public async Task<IActionResult> GetAllPessoaSemContatoAsync()
+        {
+            try
+            {
+                var retorno = await _repo.GetAllPessoasAsync(false);
+                return Ok(retorno);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { Message = "Ocorreu um erro ao obter os dados" });
+            }
+        }
+
+        /// <summary>
+        /// Busca pessoa cadastrada pelo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET api/<PessoaController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -62,6 +88,11 @@ namespace Pessoas_API.Controllers
             //return "value";
         }
 
+        /// <summary>
+        /// Cadastra uma pessoa com seus contatos vinculados
+        /// </summary>
+        /// <param name="pessoa"></param>
+        /// <returns></returns>
         // POST api/<PessoaController>
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Pessoa pessoa)
@@ -107,6 +138,7 @@ namespace Pessoas_API.Controllers
                     listaErros.Add(msg);
                 }
 
+                _repo.CancelaTransacaoAsync();
                 Console.WriteLine(msg);
                 return UnprocessableEntity(new { Erros = listaErros });
             }
@@ -116,6 +148,12 @@ namespace Pessoas_API.Controllers
             }
         }
 
+        /// <summary>
+        /// Atualiza os dados de pessoa cadastrada junto com seus contatos
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entradaPessoa"></param>
+        /// <returns></returns>
         // PUT api/<PessoaController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Pessoa entradaPessoa)
@@ -126,13 +164,11 @@ namespace Pessoas_API.Controllers
                 
                 var pessoa = await _repo.GetPessoaByIdWithTrackingAsync(id);
                 if (pessoa is null)
-                {
-                    //_repo.CancelaTransacaoAsync();
+                {                    
                     return UnprocessableEntity(new { Erros = $"Pessoa id = {id} não encontrada!!" });
                 }
                 if(_repo != null && await ((Repository)_repo).ExisteEmailRepetido(entradaPessoa, listaErros))
-                {
-                    //_repo.CancelaTransacaoAsync();
+                {                    
                     return UnprocessableEntity(new { Erros = listaErros });
                 }
                 _repo.IniciaTransacaoAsync();
@@ -176,7 +212,7 @@ namespace Pessoas_API.Controllers
                     msg = "Ocorreu um erro ao salvar os dados da Pessoa.";
                     listaErros.Add(msg);
                 }
-
+                _repo.CancelaTransacaoAsync();
                 Console.WriteLine(msg);
                 return UnprocessableEntity(new { Erros = listaErros });
             }
@@ -187,6 +223,11 @@ namespace Pessoas_API.Controllers
             }
         }
 
+        /// <summary>
+        /// Apaga uma pessoa cadastrada e todos os contatos
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE api/<PessoaController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
