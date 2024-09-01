@@ -34,6 +34,16 @@ namespace Pessoas_API.Helpers
             //pessoaExistente.Contatos.AddRange(contatosNovosEntrada);
         }
 
-        //public void AtualizaContatos
+        public async Task TransfereEntradaParaContato(Contato entrada, Contato contatoExistente)
+        {
+            long pessoaId = contatoExistente.Id;
+
+            contatoExistente.Nome = entrada.Nome;
+            contatoExistente.Email = entrada.Email;
+            contatoExistente.Telefone = entrada.Telefone;
+            contatoExistente.Whatsapp = entrada.Whatsapp;
+        }
+
+
     }
 }
