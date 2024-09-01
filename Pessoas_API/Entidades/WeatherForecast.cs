@@ -1,4 +1,4 @@
-namespace Pessoas_API
+namespace Pessoas_API.Entidades
 {
     public class WeatherForecast
     {

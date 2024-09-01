@@ -2,16 +2,16 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Pessoas_API.Entidades
+namespace Pessoas_API.DTOs
 {
     /// <summary>
     /// 
     /// </summary>
     [Table("tbContato")]
-    public class Contato : EntidadePadrao
+    public class ContatoDTO
     {
 
-
+        public long Id { get; set; }
         /// <summary>
         /// 
         /// </summary>
@@ -21,9 +21,9 @@ namespace Pessoas_API.Entidades
         /// <param name="whatsapp"></param>
         /// <param name="email"></param>
         /// <param name="pessoaId"></param>
-        public Contato(long id, string nome, string telefone, string whatsapp, string email, long pessoaId)
-            :base(id)
+        public ContatoDTO(long id, string nome, string telefone, string whatsapp, string email, long pessoaId)            
         {
+            Id = id;
             Nome = nome;
             Telefone = telefone;
             Whatsapp = whatsapp;
@@ -33,25 +33,22 @@ namespace Pessoas_API.Entidades
 
         /// <summary>
         /// 
-        /// </summary>
-        [Column("nome")]
+        /// </summary>        
         public string Nome { get; set; } = string.Empty;
 
         /// <summary>
         /// Telefone de contato
-        /// </summary>
-        [Column("telefone")]
+        /// </summary>        
         [MaxLength(15)]
         [Required(ErrorMessage = "Campo \"telefone\" é obrigatório!")]
-        //[RegularExpression(@"^\([1-9]{2}\) 9[0-9]{4}-[0-9]{4}$", ErrorMessage = "O número de telefone celular deve estar no formato (XX) 9XXXX-XXXX")]
+        [RegularExpression(@"^\([1-9]{2}\) 9[0-9]{4}-[0-9]{4}$", ErrorMessage = "O número de telefone celular deve estar no formato (XX) 9XXXX-XXXX")]
         public string Telefone { get; set; } = string.Empty;
 
         /// <summary>
         /// Whatsapp do contato
-        /// </summary>
-        [Column("whatsapp")]
+        /// </summary>        
         [MaxLength(15)]        
-        //[RegularExpression(@"^\([1-9]{2}\) 9[0-9]{4}-[0-9]{4}$", ErrorMessage = "O número de whatsapp deve estar no formato (XX) 9XXXX-XXXX")]
+        [RegularExpression(@"^\([1-9]{2}\) 9[0-9]{4}-[0-9]{4}$", ErrorMessage = "O número de whatsapp deve estar no formato (XX) 9XXXX-XXXX")]
         public string Whatsapp { get; set; } = string.Empty;
 
         /// <summary>

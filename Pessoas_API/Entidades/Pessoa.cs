@@ -33,8 +33,9 @@ namespace Pessoas_API.Entidades
         /// <summary>
         /// Email da pessoa
         /// </summary>
-        [RegularExpression(@"b[A-Z0-9._%-]+@[A-Z0-9.-]+.[A-Z]{2,4}b", ErrorMessage = "E-mail em formato inválido.")]
+        //[RegularExpression(@"b[A-Z0-9._%-]+@[A-Z0-9.-]+.[A-Z]{2,4}b", ErrorMessage = "E-mail em formato inválido.")]
         [Column("email")]
+        [EmailAddress(ErrorMessage = "E-mail em formato inválido.")]
         public string Email { get; set; } = string.Empty;
 
         /// <summary>

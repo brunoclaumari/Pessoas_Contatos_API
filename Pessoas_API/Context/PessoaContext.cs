@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pessoas_API.Entidades;
+using System.Reflection.Emit;
 
 namespace Pessoas_API.Context
 {
@@ -24,6 +25,15 @@ namespace Pessoas_API.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Pessoa>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
+            builder.Entity<Contato>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
+
+
             builder.Entity<Pessoa>()
                 .HasData(new List<Pessoa>(){
                     new Pessoa(1,"Maria Santana", "mariasanta@gmail.com"),

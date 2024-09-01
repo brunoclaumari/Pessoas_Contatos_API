@@ -14,6 +14,18 @@ namespace Pessoas_API.a_Repository
 
         Task<List<Pessoa>> GetAllPessoasAsync(bool incluiContatos = true);
 
-        Task<Pessoa> GetPessoaByIdAsync(int id);
+        Task<Pessoa> GetPessoaByIdAsNoTrackingAsync(int id, bool incluiContatos = true);
+
+        Task<Pessoa> GetPessoaByIdWithTrackingAsync(int id, bool incluiContatos = true);
+
+        Task TransfereEntradaParaEntidadeParaUpdate<T>(T entrada, T entidadeExistente) where T : EntidadePadrao;
+
+        Task<bool> SaveChangesAsync();
+
+        void IniciaTransacaoAsync();
+
+        void ConfirmaTransacaoAsync();
+
+        void CancelaTransacaoAsync();
     }
 }
