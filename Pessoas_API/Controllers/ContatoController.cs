@@ -26,7 +26,7 @@ namespace Pessoas_API.Controllers
         /// <returns></returns>
         // GET: api/<ContatoController>
         [HttpGet]        
-        public async Task<IActionResult> GetAllContatosPagedAsync([FromQuery] int pagina, [FromQuery] int totalPorPagina)
+        public async Task<IActionResult> GetAllContatosPagedAsync([FromQuery] int pagina = 1, [FromQuery] int totalPorPagina = 10)
         {
             try
             {
