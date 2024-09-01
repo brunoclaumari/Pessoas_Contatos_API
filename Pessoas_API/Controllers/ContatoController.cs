@@ -78,18 +78,19 @@ namespace Pessoas_API.Controllers
             List<string> listaErros = new List<string>();
             try
             {
-
+                _repo.IniciaTransacaoAsync();
                 var contato = await _repo.GetContatoByIdWithTrackingAsync(id);
                 if (contato is null)
-                {                    
+                {
+                    _repo.CancelaTransacaoAsync();
                     return UnprocessableEntity(new { Erros = $"Pessoa id = {id} não encontrada!!" });
                 }
                 if (_repo != null && await ((Repository)_repo).ExisteEmailRepetido(entradaContato, listaErros, false))
-                {                    
+                {
+                    _repo.CancelaTransacaoAsync();
                     return UnprocessableEntity(new { Erros = listaErros });
                 }
-                _repo.IniciaTransacaoAsync();
-
+                
                 var helper = new PessoaHelper();
                 
                 await helper.TransfereEntradaParaContato(entradaContato, contato);
@@ -129,6 +130,7 @@ namespace Pessoas_API.Controllers
                     listaErros.Add(msg);
                 }
 
+                _repo.CancelaTransacaoAsync();
                 Console.WriteLine(msg);
                 return UnprocessableEntity(new { Erros = listaErros });
             }

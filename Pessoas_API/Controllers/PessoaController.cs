@@ -137,8 +137,7 @@ namespace Pessoas_API.Controllers
                     msg = "Ocorreu um erro ao salvar os dados da Pessoa.";
                     listaErros.Add(msg);
                 }
-
-                _repo.CancelaTransacaoAsync();
+                
                 Console.WriteLine(msg);
                 return UnprocessableEntity(new { Erros = listaErros });
             }
@@ -161,17 +160,19 @@ namespace Pessoas_API.Controllers
             List<string> listaErros=new List<string>();
             try
             {
-                
+                _repo.IniciaTransacaoAsync();
                 var pessoa = await _repo.GetPessoaByIdWithTrackingAsync(id);
+
                 if (pessoa is null)
-                {                    
+                {
+                    _repo.CancelaTransacaoAsync();
                     return UnprocessableEntity(new { Erros = $"Pessoa id = {id} não encontrada!!" });
                 }
                 if(_repo != null && await ((Repository)_repo).ExisteEmailRepetido(entradaPessoa, listaErros))
-                {                    
+                {
+                    _repo.CancelaTransacaoAsync();
                     return UnprocessableEntity(new { Erros = listaErros });
-                }
-                _repo.IniciaTransacaoAsync();
+                }                
 
                 var helper = new PessoaHelper();
                 //await _repo.TransfereEntradaParaEntidadeParaUpdate(entradaPessoa, pessoa);
