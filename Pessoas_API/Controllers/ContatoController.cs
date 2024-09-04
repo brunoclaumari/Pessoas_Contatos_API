@@ -65,6 +65,66 @@ namespace Pessoas_API.Controllers
             
         }
 
+
+        /// <summary>
+        /// Cria um novo contato
+        /// </summary>
+        /// <param name="entradaContato"></param>
+        /// <returns></returns>
+        // POST api/<ContatoController>
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Contato entradaContato)
+        {
+            List<string> listaErros = new List<string>();
+            try
+            {
+                _repo.Add(entradaContato);
+                bool deuCerto = await _repo.SaveChangesAsync();
+                if (deuCerto)
+                {
+                    return Created($"api/[controller]", entradaContato);
+                }
+                else
+                {
+                    listaErros.Add("Não foi possível salvar o registro");
+                    return BadRequest(new { Erros = listaErros });
+                }
+
+            }
+            catch (DbUpdateException ex)
+            {
+                string msg = string.Empty;
+                if (ex.InnerException != null)
+                {
+                    if (ex.InnerException.Message.Contains("IX_tbPessoa_email"))
+                    {
+                        listaErros.Add($"O email {entradaContato.Email} já está em uso para alguma pessoa. Por favor, insira um email diferente.");
+                    }
+                    if (ex.InnerException.Message.Contains("IX_tbContato_email"))
+                    {
+                        string emails = entradaContato.Email;
+
+                        msg = "Um ou mais emails em seus contatos já foram cadastrados em outros contatos.\n" + emails;
+                        listaErros.Add(msg);
+                    }
+                }
+                else
+                {
+                    msg = "Ocorreu um erro ao salvar os dados de contato.";
+                    listaErros.Add(msg);
+                }
+
+                
+                Console.WriteLine(msg);
+                return UnprocessableEntity(new { Erros = listaErros });
+            }
+            catch (Exception e)
+            {                
+                return BadRequest(new { Message = "Ocorreu um erro inesperado. Verifique os dados de entrada" });
+            }
+
+        }
+
         /// <summary>
         /// Atualiza um contato
         /// </summary>

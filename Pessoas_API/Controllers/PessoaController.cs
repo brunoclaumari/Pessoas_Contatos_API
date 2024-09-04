@@ -171,7 +171,7 @@ namespace Pessoas_API.Controllers
                 if(_repo != null && await ((Repository)_repo).ExisteEmailRepetido(entradaPessoa, listaErros))
                 {
                     _repo.CancelaTransacaoAsync();
-                    return UnprocessableEntity(new { Erros = listaErros });
+                    return BadRequest(new { Erros = listaErros });
                 }                
 
                 var helper = new PessoaHelper();
